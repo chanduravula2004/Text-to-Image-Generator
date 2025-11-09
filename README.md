@@ -85,7 +85,10 @@ Design Style: Minimal dark theme + glassmorphism + smooth animations
 # 🧑‍💻 Author
 
 Chandra Sekhar Ravula
-📧 chanduravula2004@gmail.com
-🌐 https://www.linkedin.com/in/chandra-sekhar-ravula-697007270/
-📞 +91 70950997769
+
+📧 chanduravula2004@gmail.com  
+
+🌐 https://www.linkedin.com/in/chandra-sekhar-ravula-697007270/ 
+
+📞 +91 70950997769 
 
