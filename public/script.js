@@ -1,4 +1,4 @@
-// ---------- script.js ----------
+
 
 let lastPrompt = "";
 
@@ -14,7 +14,6 @@ async function generateImage() {
     return;
   }
 
-  // --- Add to history dropdown ---
   if (
     prompt &&
     !Array.from(historySelect.options).some((opt) => opt.value === prompt)
@@ -29,7 +28,7 @@ async function generateImage() {
   lastPrompt = prompt;
   regenBtn.disabled = false;
 
-  // --- Show loader animation ---
+
   imageContainer.style.display = "flex";
   setTimeout(() => imageContainer.classList.add("visible"), 20);
 
@@ -39,19 +38,19 @@ async function generateImage() {
     const formData = new FormData();
     formData.append("prompt", prompt);
 
-    // 🔥 Call your backend instead of ClipDrop API directly
-    const response = await fetch("http://localhost:5000/generate", {
+
+    const response = await fetch("https://text-to-image-generator-32h7.onrender.com/generate",  {
       method: "POST",
       body: formData,
     });
 
     if (!response.ok) throw new Error("Image generation failed");
 
-    // Receive generated image blob
+
     const blob = await response.blob();
     const imageUrl = URL.createObjectURL(blob);
 
-    // Replace loader with generated image
+
     imageContainer.innerHTML = `
       <div class="action-buttons">
         <button onclick="downloadImage('${imageUrl}')">Download</button>
@@ -71,7 +70,7 @@ async function generateImage() {
   }
 }
 
-// Regenerate with last prompt
+
 function regenerate() {
   if (lastPrompt) {
     document.getElementById("prompt").value = lastPrompt;
@@ -79,7 +78,7 @@ function regenerate() {
   }
 }
 
-// Download image
+
 function downloadImage(url) {
   const a = document.createElement("a");
   a.href = url;
@@ -89,7 +88,7 @@ function downloadImage(url) {
   document.body.removeChild(a);
 }
 
-// Delete image container
+
 function deleteImage() {
   const imageContainer = document.getElementById("image-container");
   imageContainer.classList.remove("visible");
@@ -100,7 +99,6 @@ function deleteImage() {
   }, 400);
 }
 
-// Load prompt from history
 function loadPrompt(value) {
   if (value) {
     document.getElementById("prompt").value = value;
