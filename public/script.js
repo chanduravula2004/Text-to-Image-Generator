@@ -1,5 +1,4 @@
-const API_URL = "https://clipdrop-api.co/text-to-image/v1";
-const API_KEY = "1682d9fd8154e9aea9641ce7f3c83dd60b0bec8e6aea5295d9595848d4151e0174cb2f3a061b9316cee7edca36693d8d"; 
+// ---------- script.js ----------
 
 let lastPrompt = "";
 
@@ -14,17 +13,23 @@ async function generateImage() {
     alert("Please enter a prompt!");
     return;
   }
-  if (prompt && !Array.from(historySelect.options).some(opt => opt.value === prompt)) {
+
+  // --- Add to history dropdown ---
+  if (
+    prompt &&
+    !Array.from(historySelect.options).some((opt) => opt.value === prompt)
+  ) {
     const option = document.createElement("option");
     option.value = prompt;
-    option.textContent = prompt.length > 40 ? prompt.slice(0, 40) + "..." : prompt;
+    option.textContent =
+      prompt.length > 40 ? prompt.slice(0, 40) + "..." : prompt;
     historySelect.insertBefore(option, historySelect[1]);
   }
 
   lastPrompt = prompt;
   regenBtn.disabled = false;
 
-
+  // --- Show loader animation ---
   imageContainer.style.display = "flex";
   setTimeout(() => imageContainer.classList.add("visible"), 20);
 
@@ -34,17 +39,19 @@ async function generateImage() {
     const formData = new FormData();
     formData.append("prompt", prompt);
 
-    const response = await fetch(API_URL, {
+    // 🔥 Call your backend instead of ClipDrop API directly
+    const response = await fetch("http://localhost:5000/generate", {
       method: "POST",
-      headers: { "x-api-key": API_KEY },
       body: formData,
     });
 
     if (!response.ok) throw new Error("Image generation failed");
 
+    // Receive generated image blob
     const blob = await response.blob();
     const imageUrl = URL.createObjectURL(blob);
 
+    // Replace loader with generated image
     imageContainer.innerHTML = `
       <div class="action-buttons">
         <button onclick="downloadImage('${imageUrl}')">Download</button>
@@ -55,6 +62,7 @@ async function generateImage() {
 
     const img = imageContainer.querySelector("img");
     img.onload = () => img.classList.add("visible");
+
   } catch (error) {
     console.error(error);
     alert("❌ Failed to generate image. Please try again.");
@@ -63,6 +71,7 @@ async function generateImage() {
   }
 }
 
+// Regenerate with last prompt
 function regenerate() {
   if (lastPrompt) {
     document.getElementById("prompt").value = lastPrompt;
@@ -70,6 +79,7 @@ function regenerate() {
   }
 }
 
+// Download image
 function downloadImage(url) {
   const a = document.createElement("a");
   a.href = url;
@@ -79,15 +89,18 @@ function downloadImage(url) {
   document.body.removeChild(a);
 }
 
+// Delete image container
 function deleteImage() {
   const imageContainer = document.getElementById("image-container");
   imageContainer.classList.remove("visible");
+
   setTimeout(() => {
     imageContainer.style.display = "none";
     imageContainer.innerHTML = "";
   }, 400);
 }
 
+// Load prompt from history
 function loadPrompt(value) {
   if (value) {
     document.getElementById("prompt").value = value;
