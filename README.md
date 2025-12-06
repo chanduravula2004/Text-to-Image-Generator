@@ -29,6 +29,7 @@ AI Backend: Clipdrop Text-to-Image API(https://clipdrop.co/apis)
 
 Design Style: Minimal dark theme + glassmorphism + smooth animations
 
+live demo : https://text-to-image-generator-32h7.onrender.com
 
 # Installation & Setup
 
